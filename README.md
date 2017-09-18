@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # README
 
 This README would normally document whatever steps are necessary to get the
@@ -23,6 +22,5 @@ Things you may want to cover:
 * Deployment instructions
 
 * ...
-=======
+
 # GamifiedZooniverseAPI
->>>>>>> 1d3b233cadea18813532f3a8713765c4ffd14d0a
