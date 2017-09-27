@@ -4,6 +4,8 @@ RSpec.describe 'User', type: :request do
 
   let!(:users) { create_list(:user, 10) }
   let(:user_id) {users.first.id}
+  let(:points) { 4 }
+  let(:fauxParam) { Object.new }
 
   describe 'GET /users/:id' do
     before { get "/users/#{user_id}" }
@@ -48,7 +50,17 @@ RSpec.describe 'User', type: :request do
       end
     end
 
+    context 'when the request is invalid' do
+      before { post '/users', params: { points: 50 } }
+
+      it 'returns status code 422' do
+        expect(response).to have_http_status(422)
+      end
+
+      it 'returns a validation failure message' do
+        expect(response.body).to match(/Validation failed: Zooniversehandle can't be blank/)
+      end
+    end
 
   end
-
 end
