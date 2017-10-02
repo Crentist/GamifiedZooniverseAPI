@@ -2,6 +2,7 @@ require 'faker'
 
 FactoryGirl.define do
   factory :project do
-    title { Faker::Lorem.word }
+    name { Faker::Lorem.word }
+
   end
 end

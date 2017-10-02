@@ -10,7 +10,7 @@ RSpec.describe 'User', type: :request do
   describe 'GET /users/:id' do
     before { get "/users/#{user_id}" }
 
-    context 'when the it exists' do
+    context 'when the user exists' do
       it 'returns the user' do
         expect(json).not_to be_empty
         expect(json['id']).to eq(user_id)
