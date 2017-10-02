@@ -3,11 +3,11 @@ require 'rails_helper'
 RSpec.describe 'Project', type: :request do
 
   #let!(:project) { FactoryGirl.create :project, name: 'Recorriendo La Plata' }
-  let!(:project) { FactoryGirl.create :project_with_5_collaborators}
+  let!(:project) { FactoryGirl.create :project_with_5_collaborators, name: 'Recorriendo La Plata'}
   let(:project_id) {project.id}
 
   describe 'GET /projects/:id' do
-    before { get "/project/#{project_id}" }
+    before { get "/projects/#{project_id}" }
 
     context 'when the project exists' do
       it 'returns the project' do
