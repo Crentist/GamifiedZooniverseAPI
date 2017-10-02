@@ -58,7 +58,7 @@ RSpec.describe 'User', type: :request do
       end
 
       it 'returns a validation failure message' do
-        expect(response.body).to match(/Validation failed: Zooniversehandle can't be blank/)
+        expect(response.body).to match(/Validation failed: Zooniversehandle can't be blank/) #El campo real es 'zooniverseHandle', pero el coso de las excepciones lo devuelve así por alguna razón
       end
     end
 
