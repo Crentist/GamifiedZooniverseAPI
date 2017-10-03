@@ -1,5 +1,6 @@
-class Project < ApplicationRecord
+class ProjectSerializer < ActiveModel::Serializer
+  attributes :id, :name
+
   has_many :collaborations
   has_many :users, through: :collaborations
-  validates_presence_of :name
 end
