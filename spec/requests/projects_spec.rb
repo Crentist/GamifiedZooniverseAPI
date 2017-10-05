@@ -23,11 +23,11 @@ RSpec.describe 'Project', type: :request do
       it 'collaborators should have id, zooniverseHandle and points' do
         collaborators = json['users']
         byebug
-        expect(collaborators).to exist
+        expect(collaborators).not_to be_nil
         firstCollaborator = collaborators.first
-        expect(firstCollaborator['id']).to exist
-        expect(firstCollaborator['zooniverseHandle']).to exist
-        expect(firstCollaborator['points']).to exist
+        expect(firstCollaborator['id']).not_to be_nil
+        expect(firstCollaborator['zooniverseHandle']).not_to be_nil
+        expect(firstCollaborator['points']).not_to be_nil
       end
 
       it 'returns status code 200' do
