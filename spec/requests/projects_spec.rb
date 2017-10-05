@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe 'Project', type: :request do
 
   #let!(:project) { FactoryGirl.create :project, name: 'Recorriendo La Plata' }
-  let!(:project) { FactoryGirl.create :project_with_5_collaborators, name: 'Recorriendo La Plata'}
+  let!(:project) { FactoryGirl.create :project_with_15_collaborations, name: 'Recorriendo La Plata'}
   let(:project_id) {project.id}
 
 
@@ -13,7 +13,7 @@ RSpec.describe 'Project', type: :request do
     context 'when the project exists' do
       it 'returns the project' do
         expect(json).not_to be_empty
-
+        #byebug
         expect(json['id']).to eq(project_id)
         expect(json['name']).to eq('Recorriendo La Plata')
         collaborators = json['users']
@@ -23,7 +23,6 @@ RSpec.describe 'Project', type: :request do
       it 'collaborators should have id, zooniverseHandle and points' do
         collaborators = json['users']
         byebug
-        expect(collaborators).not_to be_nil
         firstCollaborator = collaborators.first
         expect(firstCollaborator['id']).not_to be_nil
         expect(firstCollaborator['zooniverseHandle']).not_to be_nil
