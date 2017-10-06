@@ -11,7 +11,7 @@ RSpec.describe 'User', type: :request do
     before { get "/users/#{user_id}" }
 
     context 'when the user exists' do
-      it 'returns the user' do
+      it 'creates and returns the user' do
         expect(json).not_to be_empty
         expect(json['id']).to eq(user_id)
       end
@@ -45,7 +45,7 @@ RSpec.describe 'User', type: :request do
         expect(json['zooniverseHandle']).to eq('jondoe22')
       end
 
-      it 'returns 201' do
+      it 'returns 201 (created)' do
         expect(response).to have_http_status(201)
       end
     end
