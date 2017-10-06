@@ -10,16 +10,16 @@ RSpec.describe 'Project', type: :request do
     before { get "/projects/#{project_id}" }
 
     context 'when the project exists' do
-      it 'returns the project' do
+      it 'returns the project along with its collaborators' do
         expect(json).not_to be_empty
         expect(json['id']).to eq(project_id)
         expect(json['name']).to eq('Recorriendo La Plata')
-        collaborators = json['users']
+        collaborators = json['collaborators']
         expect(collaborators.size).to eq(15)
       end
 
       it 'collaborators should have id, zooniverseHandle and points' do
-        collaborators = json['users']
+        collaborators = json['collaborators']
         byebug
         firstCollaborator = collaborators.first
         expect(firstCollaborator['id']).not_to be_nil
@@ -32,5 +32,9 @@ RSpec.describe 'Project', type: :request do
       end
     end
 
+  end
+
+  describe 'POST /projects' do
+    before { post "/projects", params: {name: "Recorriendo La Plata"}}
   end
 end
