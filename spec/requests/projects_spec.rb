@@ -8,6 +8,8 @@ RSpec.describe 'Project', type: :request do
   let(:collaboration_id) {collaboration.id}
   let(:collaborator) { FactoryGirl.create :collaborator, zooniverseHandle: 'Teste Ador'}
   let(:collaborator_id) {collaborator.id}
+  let(:collaboration_with_points) { FactoryGirl.create(:collaboration, points: 10)}
+  let(:collaboration_with_points_id) {collaboration_with_points.id}
 
   describe 'GET /projects/:id' do
     before { get "/projects/#{project_id}" }
@@ -79,6 +81,20 @@ RSpec.describe 'Project', type: :request do
         expect(response).to have_http_status(201)
       end
 
+    end
+  end
+
+  describe 'PUT /projects/:project_id/collaborations/:collaboration_id' do
+    before { put "/projects/#{project_id}/collaborations/#{collaboration_with_points_id}", params: { points: 10 }}
+
+    context "when updating a collaboration with a point value to increment" do
+      it "increments the previous point value and returns the collaboration" do
+        expect(json).not_to be_empty
+        expect(json['id']).to eq(collaboration_id)
+        expect(json['user_id']).to eq(collaborator_id)
+        expect(json['project_id']).to eq(project_id)
+        expect(json['points']).to eq(20)
+      end
     end
   end
 end
