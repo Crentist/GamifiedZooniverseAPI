@@ -4,7 +4,10 @@ RSpec.describe 'Project', type: :request do
 
   let!(:project) { FactoryGirl.create :project_with_15_collaborations, name: 'Recorriendo La Plata'}
   let(:project_id) {project.id}
-  let(:collaboration) { FactoryGirl.create(:collaboration)}
+  let(:collaboration) { FactoryGirl.create(:collaboration, points: 0)}
+  let(:collaboration_id) {collaboration.id}
+  let(:collaborator) { FactoryGirl.create :collaborator, zooniverseHandle: 'Teste Ador'}
+  let(:collaborator_id) {collaborator.id}
 
   describe 'GET /projects/:id' do
     before { get "/projects/#{project_id}" }
@@ -58,11 +61,24 @@ RSpec.describe 'Project', type: :request do
     end
   end
 
-  describe 'PUT /projects/:project_id' do
-    before { put "/projects/#{project_id}", params: {collaboration: :collaboration}}
+  describe 'POST /projects/:project_id/collaborations' do
+    before { post "/projects/#{project_id}/collaborations", params: { user_id: collaborator_id, project_id: project_id, points: 0 }}
 
     context "when a project is updated adding a new collaboration" do
-      
+
+      it "creates and returns the collaboration" do
+        expect(json).not_to be_empty
+        expect(json['id']).not_to be_nil
+        expect(json['user_id']).to eq(collaborator_id)
+        expect(json['project_id']).to eq(project_id)
+        expect(json['points']).to eq(0)
+      end
+
+      it "returns status code 201 (created)" do
+        #byebug
+        expect(response).to have_http_status(201)
+      end
+
     end
   end
 end
