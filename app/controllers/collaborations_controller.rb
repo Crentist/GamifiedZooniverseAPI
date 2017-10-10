@@ -1,5 +1,5 @@
 class CollaborationsController < ApplicationController
-  before_action :set_collaboration, only: [:show, :update, :destroy]
+  before_action :set_collaboration, only: [:show, :update, :destroy, :increment]
 
   # GET /todos/:todo_id/items
   def index
@@ -30,10 +30,21 @@ class CollaborationsController < ApplicationController
     head :no_content
   end
 
+  def increment
+    #byebug
+    @collaboration.points += update_points_params[:value].to_i
+    @collaboration.save!
+    json_response(@collaboration, :accepted)
+  end
+
   private
 
   def collaboration_params
     params.permit(:project_id, :user_id, :points)
+  end
+
+  def update_points_params
+    params.permit(:value)
   end
 
   def set_collaboration

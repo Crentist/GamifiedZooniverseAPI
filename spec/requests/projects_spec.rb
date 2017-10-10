@@ -4,11 +4,11 @@ RSpec.describe 'Project', type: :request do
 
   let!(:project) { FactoryGirl.create :project_with_15_collaborations, name: 'Recorriendo La Plata'}
   let(:project_id) {project.id}
-  let(:collaboration) { FactoryGirl.create(:collaboration, points: 0)}
-  let(:collaboration_id) {collaboration.id}
   let(:collaborator) { FactoryGirl.create :collaborator, zooniverseHandle: 'Teste Ador'}
   let(:collaborator_id) {collaborator.id}
-  let(:collaboration_with_points) { FactoryGirl.create(:collaboration, points: 10)}
+  let(:collaboration) { FactoryGirl.create(:collaboration, points: 0)}
+  let(:collaboration_id) {collaboration.id}
+  let(:collaboration_with_points) { FactoryGirl.create(:collaboration, points: 10, user: collaborator, project: project)}
   let(:collaboration_with_points_id) {collaboration_with_points.id}
 
   describe 'GET /projects/:id' do
@@ -31,7 +31,7 @@ RSpec.describe 'Project', type: :request do
         expect(firstCollaborator['points']).not_to be_nil
       end
 
-      it 'returns status code 200' do
+      it 'returns status code 200 (ok)' do
         expect(response).to have_http_status(200)
       end
     end
@@ -84,16 +84,25 @@ RSpec.describe 'Project', type: :request do
     end
   end
 
-  describe 'PUT /projects/:project_id/collaborations/:collaboration_id' do
-    before { put "/projects/#{project_id}/collaborations/#{collaboration_with_points_id}", params: { points: 10 }}
+  describe 'POST /projects/:project_id/collaborations/:collaboration_id/increment' do
+    before { post "/projects/#{project_id}/collaborations/#{collaboration_with_points_id}/increment", params: { value: 10 }}
 
     context "when updating a collaboration with a point value to increment" do
       it "increments the previous point value and returns the collaboration" do
         expect(json).not_to be_empty
-        expect(json['id']).to eq(collaboration_id)
+        expect(json['id']).to eq(collaboration_with_points_id)
         expect(json['user_id']).to eq(collaborator_id)
         expect(json['project_id']).to eq(project_id)
         expect(json['points']).to eq(20)
+      end
+
+      it "the model actually reflects the change" do
+        updated_collaboration = Collaboration.find(collaboration_with_points_id)
+        expect(updated_collaboration.points).to eq(20)
+      end
+
+      it 'returns status code 202 (accepted)' do
+        expect(response).to have_http_status(202)
       end
     end
   end
