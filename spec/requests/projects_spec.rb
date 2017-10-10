@@ -47,7 +47,7 @@ RSpec.describe 'Project', type: :request do
   end
 
   describe 'POST /projects' do
-    before { post "/projects", params: {name: "Recorriendo La Plata"}}
+    before { post "/projects", params: {name: "Recorriendo La Plata"} }
 
     context "when the request is valid" do
       it "creates and returns the project" do
@@ -56,10 +56,17 @@ RSpec.describe 'Project', type: :request do
         expect(json['name']).to eq("Recorriendo La Plata")
         expect(json['collaborators']).to be_empty
       end
+
+      it 'returns status code 201 (created)' do
+        expect(response).to have_http_status(201)
+      end
     end
 
-    it 'returns status code 201 (created)' do
-      expect(response).to have_http_status(201)
+    context "when the request is invalid" do
+      it "returns status code 422 (unprocessable entity)" do
+        post "/projects", params: {nombre: "Recorriendo La Plata"}
+        expect(response).to have_http_status(422)
+      end
     end
   end
 
@@ -77,7 +84,6 @@ RSpec.describe 'Project', type: :request do
       end
 
       it "returns status code 201 (created)" do
-        #byebug
         expect(response).to have_http_status(201)
       end
 
