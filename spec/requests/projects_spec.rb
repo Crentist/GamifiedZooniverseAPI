@@ -62,7 +62,7 @@ RSpec.describe 'Project', type: :request do
       end
     end
 
-    context "when the request is invalid" do
+    context "when the request is invalid (wrong param name)" do
       it "returns status code 422 (unprocessable entity)" do
         post "/projects", params: {nombre: "Recorriendo La Plata"}
         expect(response).to have_http_status(422)
@@ -74,7 +74,6 @@ RSpec.describe 'Project', type: :request do
     before { post "/projects/#{project_id}/collaborations", params: { user_id: collaborator_id, project_id: project_id, points: 0 }}
 
     context "when a project is updated adding a new collaboration" do
-
       it "creates and returns the collaboration" do
         expect(json).not_to be_empty
         expect(json['id']).not_to be_nil
