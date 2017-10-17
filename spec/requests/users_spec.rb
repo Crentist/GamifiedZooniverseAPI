@@ -30,7 +30,6 @@ RSpec.describe 'User', type: :request do
       before { get "/users/#{user_with_collaborations_id}"}
 
       it 'returns the user and its collaborations' do
-        byebug
         expect(json['id']).to eq(user_with_collaborations_id)
         expect(json['collaborations'].size).to eq(5)
         expect(json['collaborations'].first['points']).not_to be_nil #Sólo chequear el primero, no tiene sentido iterar para chequear que todos tengan la misma estructura

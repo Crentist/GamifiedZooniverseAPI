@@ -1,7 +1,7 @@
 require 'faker'
 
 FactoryGirl.define do
-  factory :user, aliases: [:collaborator, :admin] do
+  factory :user, aliases: [:collaborator, :owner] do
     zooniverseHandle { Faker::Lorem.word }
 
 
@@ -11,7 +11,8 @@ FactoryGirl.define do
       end
 
       after(:create) do |user,evaluator|
-        create_list(:collaboration, evaluator.collaborations_count, user: user)
+        byebug
+        create_list(:collaboration, evaluator.collaborations_count, collaborator: user)
       end
     end
   end

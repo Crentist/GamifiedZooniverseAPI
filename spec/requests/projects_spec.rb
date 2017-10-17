@@ -47,10 +47,11 @@ RSpec.describe 'Project', type: :request do
   end
 
   describe 'POST /projects' do
-    before { post "/projects", params: {name: "Recorriendo La Plata"} }
+    before { post "/projects", params: {name: "Recorriendo La Plata", user_id: collaborator_id} }
 
     context "when the request is valid" do
       it "creates and returns the project" do
+        byebug
         expect(json).not_to be_empty
         expect(json['id']).not_to eq(1) #Porque es el id del proyecto que ya existe que se crea al principio del test
         expect(json['name']).to eq("Recorriendo La Plata")

@@ -3,6 +3,7 @@ require 'faker'
 FactoryGirl.define do
   factory :project do
     name { Faker::Lorem.word }
+    user
 
     factory :project_with_15_collaborations do
       transient do
