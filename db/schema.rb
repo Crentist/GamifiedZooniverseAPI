@@ -34,10 +34,6 @@ ActiveRecord::Schema.define(version: 20171017123053) do
     t.string "zooniverseHandle"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "projects_id"
-    t.integer "owned_projects_id"
-    t.index ["owned_projects_id"], name: "index_users_on_owned_projects_id"
-    t.index ["projects_id"], name: "index_users_on_projects_id"
   end
 
 end

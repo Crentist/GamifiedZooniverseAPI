@@ -2,11 +2,11 @@ require 'rails_helper'
 
 RSpec.describe 'User', type: :request do
 
-  #let!(:users) { create_list(:user, 10) }
   let(:user) {FactoryGirl.create(:user)}
   let(:user_with_collaborations) {FactoryGirl.create(:user_with_5_collaborations)}
   let(:user_id) {user.id}
   let(:user_with_collaborations_id) {user_with_collaborations.id}
+  let(:user_with_2_owned_projects) {FactoryGirl.create(:user_with_2_owned_projects)}
 
   describe 'GET /users/:id' do
 
@@ -34,6 +34,17 @@ RSpec.describe 'User', type: :request do
         expect(json['collaborations'].size).to eq(5)
         expect(json['collaborations'].first['points']).not_to be_nil #Sólo chequear el primero, no tiene sentido iterar para chequear que todos tengan la misma estructura
         expect(json['collaborations'].first['project_id']).not_to be_nil
+      end
+    end
+
+    context 'when the user exists and owns a project' do
+      before { get "/users/#{user_with_2_owned_projects.id}"}
+
+      it "returns the user and his owned project/s" do
+        #byebug
+        expect(json['id']).to eq(user_with_2_owned_projects.id)
+        expect(json['owned_projects'].size).to eq(2)
+        expect(json['owned_projects'].first['name']).not_to be_nil
       end
     end
 

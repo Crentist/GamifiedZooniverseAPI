@@ -51,7 +51,7 @@ RSpec.describe 'Project', type: :request do
 
     context "when the request is valid" do
       it "creates and returns the project" do
-        byebug
+        #byebug
         expect(json).not_to be_empty
         expect(json['id']).not_to eq(1) #Porque es el id del proyecto que ya existe que se crea al principio del test
         expect(json['name']).to eq("Recorriendo La Plata")

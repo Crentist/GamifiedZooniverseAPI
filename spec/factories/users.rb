@@ -11,8 +11,17 @@ FactoryGirl.define do
       end
 
       after(:create) do |user,evaluator|
-        byebug
-        create_list(:collaboration, evaluator.collaborations_count, collaborator: user)
+        create_list(:collaboration, evaluator.collaborations_count, user: user)
+      end
+    end
+
+    factory :user_with_2_owned_projects do
+      transient do
+        projects_count 2
+      end
+
+      after(:create) do |user,evaluator|
+        create_list(:project, evaluator.projects_count, user:user)
       end
     end
   end

@@ -7,4 +7,8 @@ class Project < ApplicationRecord
 
   alias_method :collaborators, :users
   alias_method :owner, :user
+
+  def owner=(user)
+    self.user = user
+  end
 end

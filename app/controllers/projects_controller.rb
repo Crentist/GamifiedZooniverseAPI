@@ -29,7 +29,7 @@ class ProjectsController < ApplicationController
 
   def project_params
     # whitelist params
-    params.permit(:name)
+    params.permit(:name, :user_id)
   end
 
   def set_project
