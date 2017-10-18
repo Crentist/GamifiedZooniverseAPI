@@ -1,11 +1,13 @@
 class Project < ApplicationRecord
   has_many :collaborations
   has_many :users, through: :collaborations
-  belongs_to :user#, :class_name => 'User'#, :optional => true
+  belongs_to :user, :optional => true
 
-  validates_presence_of :name, :user
+  #validates_presence_of :name, :user
 
   validates :name, uniqueness: { message: 'Project name must be unique. "%{value}" is already taken' }
+  validates :name, presence: { message: "Project name can't be blank"}
+  validates :user, presence: { message: "Project owner must be provided"}
 
   alias_method :collaborators, :users
   alias_method :owner, :user

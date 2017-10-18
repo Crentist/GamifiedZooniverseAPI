@@ -80,6 +80,18 @@ RSpec.describe 'Project', type: :request do
       end
     end
 
+    context "when the request is invalid (missing params)" do
+      it "returns a validation error" do
+        post "/projects", params: {}
+        byebug
+        expect(json['message']).to match(/Project name can't be blank, Project owner must be provided/)
+      end
+
+      it "returns status code 422 (unprocessable entity)" do
+        expect(response).to have_http_status(422)
+      end
+    end
+
     context "when the name of the project is taken" do
       before { post "/projects", params: {name: "Recorriendo La Plata", user_id: collaborator_id} }
 
@@ -92,8 +104,9 @@ RSpec.describe 'Project', type: :request do
       end
     end
 
+
+
     #Tendría que poner otro para que tire error si falta name o user_id
-    #Tendría que poner otro para que cuando el nombre existe, tire error
   end
 
   describe 'POST /projects/:project_id/collaborations' do
