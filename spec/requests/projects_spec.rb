@@ -35,10 +35,8 @@ RSpec.describe 'Project', type: :request do
 
       it 'returns its owner along with its data' do
         responseOwner = json['owner']
-        #byebug
         expect(responseOwner['id']).to eq (owner.id)
         expect(responseOwner['zooniverseHandle']).to eq("Administratorrr")
-
       end
 
       it 'returns status code 200 (ok)' do
@@ -57,11 +55,11 @@ RSpec.describe 'Project', type: :request do
   end
 
   describe 'POST /projects' do
-    before { post "/projects", params: {name: "Recorriendo Buenos Aires", user_id: collaborator_id} }
 
     context "when the request is valid" do
+      before { post "/projects", params: {name: "Recorriendo Buenos Aires"} }
+
       it "creates and returns the project" do
-        #byebug
         expect(json).not_to be_empty
         expect(json['id']).not_to eq(project_id)
         expect(json['name']).to eq("Recorriendo Buenos Aires")
@@ -81,10 +79,10 @@ RSpec.describe 'Project', type: :request do
     end
 
     context "when the request is invalid (missing params)" do
+      before { post "/projects", params: {} }
+
       it "returns a validation error" do
-        post "/projects", params: {}
-        byebug
-        expect(json['message']).to match(/Project name can't be blank, Project owner must be provided/)
+        expect(json['message']).to match(/Project name can't be blank/i) #La i indica que es case-insensitive
       end
 
       it "returns status code 422 (unprocessable entity)" do
@@ -103,10 +101,6 @@ RSpec.describe 'Project', type: :request do
         expect(response).to have_http_status(422)
       end
     end
-
-
-
-    #Tendría que poner otro para que tire error si falta name o user_id
   end
 
   describe 'POST /projects/:project_id/collaborations' do
@@ -150,4 +144,7 @@ RSpec.describe 'Project', type: :request do
       end
     end
   end
+
+  #Agregar usuario como dueño de un proyecto (PUT?)
+  #
 end
