@@ -5,6 +5,8 @@ class Project < ApplicationRecord
 
   validates_presence_of :name, :user
 
+  validates :name, uniqueness: { message: 'Project name must be unique. "%{value}" is already taken' }
+
   alias_method :collaborators, :users
   alias_method :owner, :user
 

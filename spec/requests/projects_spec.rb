@@ -61,10 +61,10 @@ RSpec.describe 'Project', type: :request do
 
     context "when the request is valid" do
       it "creates and returns the project" do
-        byebug
+        #byebug
         expect(json).not_to be_empty
-        expect(json['id']).not_to eq(project_id) #Porque es el id del proyecto que ya existe que se crea al principio del test
-        expect(json['name']).to eq("Recorriendo La Plata")
+        expect(json['id']).not_to eq(project_id)
+        expect(json['name']).to eq("Recorriendo Buenos Aires")
         expect(json['collaborators']).to be_empty
       end
 
@@ -84,7 +84,7 @@ RSpec.describe 'Project', type: :request do
       before { post "/projects", params: {name: "Recorriendo La Plata", user_id: collaborator_id} }
 
       it "returns a validation error" do
-        expect(response.body).to match(/Couldn't find [Uu]ser/)
+        expect(json['message']).to match(/Project name must be unique. "Recorriendo La Plata" is already taken/)
       end
 
       it "returns status code 422 (unprocessable entity)" do
