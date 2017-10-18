@@ -2,7 +2,8 @@ require 'rails_helper'
 
 RSpec.describe 'Project', type: :request do
 
-  let!(:project) { FactoryGirl.create :project_with_15_collaborations, name: 'Recorriendo La Plata'}
+  let(:owner) { FactoryGirl.create :owner, zooniverseHandle: 'Administratorrr'}
+  let!(:project) { FactoryGirl.create :project_with_15_collaborations, name: 'Recorriendo La Plata', owner: owner}
   let(:project_id) {project.id}
   let(:collaborator) { FactoryGirl.create :collaborator, zooniverseHandle: 'Teste Ador'}
   let(:collaborator_id) {collaborator.id}
@@ -10,6 +11,7 @@ RSpec.describe 'Project', type: :request do
   let(:collaboration_id) {collaboration.id}
   let(:collaboration_with_points) { FactoryGirl.create(:collaboration, points: 10, user: collaborator, project: project)}
   let(:collaboration_with_points_id) {collaboration_with_points.id}
+
 
   describe 'GET /projects/:id' do
     before { get "/projects/#{project_id}" }
@@ -31,6 +33,14 @@ RSpec.describe 'Project', type: :request do
         expect(firstCollaborator['points']).not_to be_nil
       end
 
+      it 'returns its owner along with its data' do
+        responseOwner = json['owner']
+        #byebug
+        expect(responseOwner['id']).to eq (owner.id)
+        expect(responseOwner['zooniverseHandle']).to eq("Administratorrr")
+
+      end
+
       it 'returns status code 200 (ok)' do
         expect(response).to have_http_status(200)
       end
@@ -47,13 +57,13 @@ RSpec.describe 'Project', type: :request do
   end
 
   describe 'POST /projects' do
-    before { post "/projects", params: {name: "Recorriendo La Plata", user_id: collaborator_id} }
+    before { post "/projects", params: {name: "Recorriendo Buenos Aires", user_id: collaborator_id} }
 
     context "when the request is valid" do
       it "creates and returns the project" do
-        #byebug
+        byebug
         expect(json).not_to be_empty
-        expect(json['id']).not_to eq(1) #Porque es el id del proyecto que ya existe que se crea al principio del test
+        expect(json['id']).not_to eq(project_id) #Porque es el id del proyecto que ya existe que se crea al principio del test
         expect(json['name']).to eq("Recorriendo La Plata")
         expect(json['collaborators']).to be_empty
       end
@@ -69,6 +79,21 @@ RSpec.describe 'Project', type: :request do
         expect(response).to have_http_status(422)
       end
     end
+
+    context "when the name of the project is taken" do
+      before { post "/projects", params: {name: "Recorriendo La Plata", user_id: collaborator_id} }
+
+      it "returns a validation error" do
+        expect(response.body).to match(/Couldn't find [Uu]ser/)
+      end
+
+      it "returns status code 422 (unprocessable entity)" do
+        expect(response).to have_http_status(422)
+      end
+    end
+
+    #Tendría que poner otro para que tire error si falta name o user_id
+    #Tendría que poner otro para que cuando el nombre existe, tire error
   end
 
   describe 'POST /projects/:project_id/collaborations' do

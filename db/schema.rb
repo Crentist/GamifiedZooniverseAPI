@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171017123053) do
+ActiveRecord::Schema.define(version: 20171017122638) do
 
   create_table "collaborations", force: :cascade do |t|
     t.integer "points"
@@ -25,8 +25,6 @@ ActiveRecord::Schema.define(version: 20171017123053) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "user_id"
-    t.integer "collaborators_id"
-    t.index ["collaborators_id"], name: "index_projects_on_collaborators_id"
     t.index ["user_id"], name: "index_projects_on_user_id"
   end
 
