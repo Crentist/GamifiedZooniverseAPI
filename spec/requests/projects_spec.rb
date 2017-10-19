@@ -74,6 +74,7 @@ RSpec.describe 'Project', type: :request do
     context "when the request is invalid (wrong param name)" do
       it "returns status code 422 (unprocessable entity)" do
         post "/projects", params: {nombre: "Recorriendo La Plata"}
+        byebug
         expect(response).to have_http_status(422)
       end
     end
@@ -140,6 +141,30 @@ RSpec.describe 'Project', type: :request do
       end
 
       it 'returns status code 202 (accepted)' do
+        expect(response).to have_http_status(202)
+      end
+    end
+  end
+
+  describe 'PUT /projects/:project_id' do
+    let(:projectWithNoOwner) { FactoryGirl.create :project, name: "I turned myself into a project, Morty!"}
+    before { put "/projects/#{projectWithNoOwner.id}", params: { owner_id: owner.id}}
+
+    context "when a project is updated adding its owner" do
+      it "adds the user as the project owner and returns the project" do
+        #byebug
+        expect(json['id']).to eq(projectWithNoOwner.id)
+        responseOwner = json['owner']
+        expect(responseOwner['id']).to eq (owner.id)
+        expect(responseOwner['zooniverseHandle']).to eq("Administratorrr")
+      end
+
+      it "the model actually reflects the change" do
+        updated_project = Project.find(projectWithNoOwner.id)
+        expect(updated_project.owner.id).to eq(owner.id)
+      end
+
+      it "returns status code 202 (accepted)" do
         expect(response).to have_http_status(202)
       end
     end

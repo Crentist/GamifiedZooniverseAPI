@@ -8,4 +8,5 @@ Rails.application.routes.draw do
   end
 
   post "/projects/:project_id/collaborations/:collaboration_id/increment", to: 'collaborations#increment'
+  #post "/projects/:project_id/owner", to: 'projects#owner'
 end

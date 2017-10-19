@@ -3,6 +3,5 @@ class User < ApplicationRecord
   has_many :projects, through: :collaborations
   has_many :owned_projects, :class_name => 'Project'
 
-  #validates_presence_of :zooniverseHandle, message: {'zooniverseHandle'}
   validates :zooniverseHandle, presence: { message: "zooniverseHandle can't be blank" }
 end
