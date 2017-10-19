@@ -71,14 +71,6 @@ RSpec.describe 'Project', type: :request do
       end
     end
 
-    context "when the request is invalid (wrong param name)" do
-      it "returns status code 422 (unprocessable entity)" do
-        post "/projects", params: {nombre: "Recorriendo La Plata"}
-        byebug
-        expect(response).to have_http_status(422)
-      end
-    end
-
     context "when the request is invalid (missing params)" do
       before { post "/projects", params: {} }
 
@@ -148,7 +140,7 @@ RSpec.describe 'Project', type: :request do
 
   describe 'PUT /projects/:project_id' do
     let(:projectWithNoOwner) { FactoryGirl.create :project, name: "I turned myself into a project, Morty!"}
-    before { put "/projects/#{projectWithNoOwner.id}", params: { owner_id: owner.id}}
+    before { put "/projects/#{projectWithNoOwner.id}", params: { user_id: owner.id}}
 
     context "when a project is updated adding its owner" do
       it "adds the user as the project owner and returns the project" do
