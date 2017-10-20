@@ -55,7 +55,6 @@ RSpec.describe 'Project', type: :request do
   end
 
   describe 'POST /projects' do
-
     context "when the request is valid" do
       before { post "/projects", params: {name: "Recorriendo Buenos Aires"} }
 

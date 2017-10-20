@@ -10,7 +10,7 @@ RSpec.describe 'User', type: :request do
 
   describe 'GET /users/:id' do
 
-    context 'when the user exists and has no collaborations' do
+    context 'when the user exists and has no collaborations and no owned projects' do
       before { get "/users/#{user_id}" }
       it 'returns the user' do
         expect(json).not_to be_empty
@@ -19,6 +19,10 @@ RSpec.describe 'User', type: :request do
 
       it 'returns an empty collaborations field' do
         expect(json['collaborations'].size).to eq(0)
+      end
+
+      it 'returns an empty owned projects field' do
+        expect(json['owned_projects'].size).to eq(0)
       end
 
       it 'returns status code 200 (ok)' do
