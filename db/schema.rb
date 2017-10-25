@@ -10,7 +10,16 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171024124517) do
+ActiveRecord::Schema.define(version: 20171025133240) do
+
+  create_table "badges", force: :cascade do |t|
+    t.string "name"
+    t.string "image"
+    t.string "description"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "criteria"
+  end
 
   create_table "collaborations", force: :cascade do |t|
     t.integer "points"
@@ -18,6 +27,7 @@ ActiveRecord::Schema.define(version: 20171024124517) do
     t.integer "user_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer "classification_count"
     t.index ["project_id"], name: "index_collaborations_on_project_id"
     t.index ["user_id"], name: "index_collaborations_on_user_id"
   end
@@ -27,6 +37,7 @@ ActiveRecord::Schema.define(version: 20171024124517) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "user_id"
+    t.string "discipline"
     t.index ["user_id"], name: "index_projects_on_user_id"
   end
 
