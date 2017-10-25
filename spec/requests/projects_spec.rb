@@ -107,6 +107,11 @@ RSpec.describe 'Project', type: :request do
         expect(json['points']).to eq(0)
       end
 
+      it "the model actually reflects the change" do
+        updated_collaboration = Collaboration.find(json['id'])
+        expect(updated_collaboration).not_to be_nil
+      end
+
       it "returns status code 201 (created)" do
         expect(response).to have_http_status(201)
       end

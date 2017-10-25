@@ -10,12 +10,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171017122638) do
+ActiveRecord::Schema.define(version: 20171024124517) do
 
   create_table "collaborations", force: :cascade do |t|
     t.integer "points"
     t.integer "project_id"
     t.integer "user_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.index ["project_id"], name: "index_collaborations_on_project_id"
     t.index ["user_id"], name: "index_collaborations_on_user_id"
   end
