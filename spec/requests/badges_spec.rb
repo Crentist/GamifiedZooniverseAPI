@@ -2,10 +2,9 @@ require 'rails_helper'
 
 RSpec.describe 'Badge', type: :request do
   let(:badge) { FactoryGirl.create :badge, name: 'Primer colaboración', description: 'Lograste tu primer colaboración en el proyecto'}
-  let(:badge_granted) { FactoryGirl.create :badge, name: 'Primer colaboración', description: 'Lograste tu primer colaboración en el proyecto'}
+  let(:project_badge_granted) { FactoryGirl.create :project_badge_granted, name: 'Primer colaboración', description: 'Lograste tu primer colaboración en el proyecto'}
 
   describe 'GET /badges/:id' do
-
 
     context 'when the badge exists and hasnt been granted' do
       before { get "/badges/#{badge.id}" }
@@ -19,10 +18,10 @@ RSpec.describe 'Badge', type: :request do
     end
 
     context 'when the badge exists and has been granted three times in a project' do
-      before { get "/badges/#{badge_granted.id}/project/#{project.id}" }
+      before { get "/badges/#{project_badge_granted.id}/project/#{project.id}" }
       it 'returns the badge' do
         expect(json).not_to be_empty
-        expect(json['id']).to eq(badge_granted.id)
+        expect(json['id']).to eq(project_badge_granted.id)
         expect(json['name']).to eq('Primer colaboración')
         expect(json['description']).to eq('Lograste tu primer colaboración en el proyecto')
         expect(json['collaborators'].size).to eq(3)
