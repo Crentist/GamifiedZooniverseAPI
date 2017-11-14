@@ -67,7 +67,6 @@ RSpec.describe 'User', type: :request do
   end
 
   describe 'POST /users' do
-    let(:existingUser) { FactoryGirl.build(:user, zooniverseHandle: 'jondoe33') }
 
     context 'when the request is valid' do
       before { post "/users", params: {zooniverseHandle: 'jondoe22'}}
@@ -81,6 +80,19 @@ RSpec.describe 'User', type: :request do
       end
     end
 
+    context 'when the user already exists' do
+      let!(:existingUser) { FactoryGirl.create(:user, zooniverseHandle: 'jondoe33') }
+      before { post "/users", params: {zooniverseHandle: 'jondoe33'}}
+
+      it "returns the existing user" do
+        byebug
+        expect(json).not_to be_empty
+        expect(json['id']).not_to be_nil
+        expect(json['zooniverseHandle']).not_to be_nil
+      end
+
+    end
+
     context 'when the request is invalid' do
       before { post '/users', params: { points: 50 } }
 
@@ -89,7 +101,7 @@ RSpec.describe 'User', type: :request do
       end
 
       it 'returns a validation failure message' do
-        expect(json['message']).to match(/zooniverseHandle can't be blank/) #El campo real es 'zooniverseHandle', pero el coso de las excepciones lo devuelve así por alguna razón
+        expect(json['message']).to match(/zooniverseHandle can't be blank/)
       end
     end
 

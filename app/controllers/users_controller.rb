@@ -7,8 +7,12 @@ class UsersController < ApplicationController
   end
 
   def create
-    @user = User.create!(user_params)
-    json_response(@user, :created)
+    if ((@user = User.find_by(zooniverseHandle: (params[:zooniverseHandle]))))
+      json_response(@user, :ok)
+    else
+      @user = User.create!(user_params)
+      json_response(@user, :created)
+    end
   end
 
   def show

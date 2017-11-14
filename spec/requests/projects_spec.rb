@@ -18,6 +18,7 @@ RSpec.describe 'Project', type: :request do
 
     context 'when the project exists' do
       it 'returns the project along with its collaborators' do
+        byebug
         expect(json).not_to be_empty
         expect(json['id']).to eq(project_id)
         expect(json['name']).to eq('Recorriendo La Plata')
@@ -82,7 +83,6 @@ RSpec.describe 'Project', type: :request do
       end
     end
 
-    #Acá por ahí, en lugar de devolver un error, directamente devuelvo el proyecto
     context "when the name of the project is taken" do
       before { post "/projects", params: {name: "Recorriendo La Plata", user_id: collaborator_id} }
 

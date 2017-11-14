@@ -2,7 +2,8 @@ require 'faker'
 
 FactoryGirl.define do
   factory :user, aliases: [:collaborator, :owner] do
-    zooniverseHandle { Faker::Lorem.word }
+    #zooniverseHandle { Faker::Lorem.word }
+    sequence(:zooniverseHandle, 'a') { |n| "Gemini" + n }
 
 
     factory :user_with_5_collaborations do
