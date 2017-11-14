@@ -4,4 +4,5 @@ class Collaboration < ApplicationRecord
   has_many :project_badges
 
   alias_method :collaborator, :user
+  #alias_method :date, :created_at
 end

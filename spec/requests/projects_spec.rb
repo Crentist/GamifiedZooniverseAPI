@@ -144,6 +144,17 @@ RSpec.describe 'Project', type: :request do
         expect(response).to have_http_status(202)
       end
     end
+
+    context "when the collaboration doesn't exist" do
+      before { post "/projects/#{project_id}/collaborations/#{nil}/increment", params: { value: 10 }}
+      it "creates the collaboration first and then increments" do
+        expect(json).not_to be_empty
+        expect(json['id']).to eq(collaboration_with_points_id)
+        expect(json['user_id']).to eq(collaborator_id)
+        expect(json['project_id']).to eq(project_id)
+        expect(json['points']).to eq(10)
+      end
+    end
   end
 
   describe 'PUT /projects/:project_id' do

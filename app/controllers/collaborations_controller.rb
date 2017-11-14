@@ -1,5 +1,5 @@
 class CollaborationsController < ApplicationController
-  before_action :set_collaboration, only: [:show, :update, :destroy, :increment]
+  before_action :set_collaboration, only: [:show, :update, :destroy]
 
   # GET /todos/:todo_id/items
   def index
@@ -9,6 +9,7 @@ class CollaborationsController < ApplicationController
 
   # GET /todos/:todo_id/items/:id
   def show
+    byebug
     json_response(@collaboration)
   end
 
@@ -32,6 +33,7 @@ class CollaborationsController < ApplicationController
 
   def increment
     #byebug
+    @collaboration = Collaboration.find(params[:collaboration_id]) || Collaboration.create!(collaboration_params)
     @collaboration.points += update_points_params[:value].to_i
     @collaboration.save!
     json_response(@collaboration, :accepted)

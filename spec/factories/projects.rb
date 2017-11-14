@@ -2,7 +2,8 @@ require 'faker'
 
 FactoryGirl.define do
   factory :project do
-    name { Faker::Lorem.word }
+    #name { Faker::Lorem.word }
+    sequence(:name, 'a') { |n| "Saturno" + n }
 
     factory :project_with_15_collaborations do
       transient do

@@ -29,6 +29,13 @@ class UsersController < ApplicationController
     head :no_content
   end
 
+  def projectCollaboration
+    @user = User.find(params[:user_id])
+    collaboration = @user.collaborations.find_by(project_id: params[:project_id])
+    byebug
+    json_response(collaboration, :ok)
+  end
+
   private
 
   def user_params
@@ -37,6 +44,7 @@ class UsersController < ApplicationController
   end
 
   def set_user
+    #byebug
     @user = User.find(params[:id])
   end
 end

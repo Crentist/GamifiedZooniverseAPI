@@ -2,11 +2,11 @@ require 'rails_helper'
 
 RSpec.describe 'User', type: :request do
 
-  let(:user) {FactoryGirl.create(:user)}
-  let(:user_with_collaborations) {FactoryGirl.create(:user_with_5_collaborations)}
-  let(:user_id) {user.id}
-  let(:user_with_collaborations_id) {user_with_collaborations.id}
-  let(:user_with_2_owned_projects) {FactoryGirl.create(:user_with_2_owned_projects)}
+  let!(:user) {FactoryGirl.create(:user)}
+  let!(:user_with_collaborations) {FactoryGirl.create(:user_with_5_collaborations)}
+  let!(:user_id) {user.id}
+  let!(:user_with_collaborations_id) {user_with_collaborations.id}
+  let!(:user_with_2_owned_projects) {FactoryGirl.create(:user_with_2_owned_projects)}
 
   describe 'GET /users/:id' do
 
@@ -85,7 +85,6 @@ RSpec.describe 'User', type: :request do
       before { post "/users", params: {zooniverseHandle: 'jondoe33'}}
 
       it "returns the existing user" do
-        byebug
         expect(json).not_to be_empty
         expect(json['id']).not_to be_nil
         expect(json['zooniverseHandle']).not_to be_nil
@@ -105,5 +104,17 @@ RSpec.describe 'User', type: :request do
       end
     end
 
+  end
+
+  describe 'GET /users/:user_id/collaboration/:collaboration_id/collaboration' do
+    let!(:project_id) {user_with_collaborations.collaborations.first.project.id}
+    before { get "/users/#{user_with_collaborations_id}/collaboration/#{project_id}" }
+
+    context "when a user collaborates in a project" do
+      it "returns the appropriate collaboration" do
+        expect(json).not_to be_empty
+        byebug
+      end
+    end
   end
 end
