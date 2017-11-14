@@ -82,15 +82,19 @@ RSpec.describe 'Project', type: :request do
       end
     end
 
+    #Acá por ahí, en lugar de devolver un error, directamente devuelvo el proyecto
     context "when the name of the project is taken" do
       before { post "/projects", params: {name: "Recorriendo La Plata", user_id: collaborator_id} }
 
-      it "returns a validation error" do
-        expect(json['message']).to match(/Project name must be unique. "Recorriendo La Plata" is already taken/)
+      it "returns the existing project" do
+        expect(json).not_to be_empty
+        expect(json['id']).not_to be_nil
+        expect(json['collaborators']).not_to be_nil
+        expect(json['name']).to eq('Recorriendo La Plata')
       end
 
-      it "returns status code 422 (unprocessable entity)" do
-        expect(response).to have_http_status(422)
+      it "returns status code 200 (ok)" do
+        expect(response).to have_http_status(200)
       end
     end
   end

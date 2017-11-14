@@ -7,8 +7,14 @@ class ProjectsController < ApplicationController
   end
 
   def create
-    @project = Project.create!(project_params)
-    json_response(@project, :created)
+    if ( ( @project = Project.find_by(name: (params[:name])) ) )
+      #byebug
+      json_response(@project, :ok)
+    else
+      #byebug
+      @project = Project.create!(project_params)
+      json_response(@project, :created)
+    end
   end
 
   def show
