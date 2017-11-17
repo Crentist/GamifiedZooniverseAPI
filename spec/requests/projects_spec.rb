@@ -18,7 +18,6 @@ RSpec.describe 'Project', type: :request do
 
     context 'when the project exists' do
       it 'returns the project along with its collaborators' do
-        byebug
         expect(json).not_to be_empty
         expect(json['id']).to eq(project_id)
         expect(json['name']).to eq('Recorriendo La Plata')
@@ -100,7 +99,7 @@ RSpec.describe 'Project', type: :request do
   end
 
   describe 'POST /projects/:project_id/collaborations' do
-    before { post "/projects/#{project_id}/collaborations", params: { user_id: collaborator_id, project_id: project_id, points: 0 }}
+    before { post "/projects/#{project_id}/collaborations", params: { user_id: collaborator_id, project_id: project_id}}
 
     context "when a project is updated adding a new collaboration" do
       it "creates and returns the collaboration" do
@@ -121,10 +120,13 @@ RSpec.describe 'Project', type: :request do
       end
 
     end
+
   end
 
+
+  #Cambiar esto para que reciba un listado de tareas en lugar de los puntos directamente (por ej: {'tasks' : ['drawing', 'drawing', 'simpleQuestion']})
   describe 'POST /projects/:project_id/collaborations/:collaboration_id/increment' do
-    before { post "/projects/#{project_id}/collaborations/#{collaboration_with_points_id}/increment", params: { value: 10 }}
+    before { post "/projects/#{project_id}/collaborations/#{collaboration_with_points_id}/increment", params: { tasks: ['drawing','drawing','simpleQuestion'] }}
 
     context "when updating a collaboration with a point value to increment" do
       it "increments the previous point value and returns the collaboration" do
@@ -132,12 +134,12 @@ RSpec.describe 'Project', type: :request do
         expect(json['id']).to eq(collaboration_with_points_id)
         expect(json['user_id']).to eq(collaborator_id)
         expect(json['project_id']).to eq(project_id)
-        expect(json['points']).to eq(20)
+        expect(json['points']).to eq(35)
       end
 
       it "the model actually reflects the change" do
         updated_collaboration = Collaboration.find(collaboration_with_points_id)
-        expect(updated_collaboration.points).to eq(20)
+        expect(updated_collaboration.points).to eq(35)
       end
 
       it 'returns status code 202 (accepted)' do
@@ -145,16 +147,6 @@ RSpec.describe 'Project', type: :request do
       end
     end
 
-    context "when the collaboration doesn't exist" do
-      before { post "/projects/#{project_id}/collaborations/#{nil}/increment", params: { value: 10 }}
-      it "creates the collaboration first and then increments" do
-        expect(json).not_to be_empty
-        expect(json['id']).to eq(collaboration_with_points_id)
-        expect(json['user_id']).to eq(collaborator_id)
-        expect(json['project_id']).to eq(project_id)
-        expect(json['points']).to eq(10)
-      end
-    end
   end
 
   describe 'PUT /projects/:project_id' do
@@ -163,7 +155,6 @@ RSpec.describe 'Project', type: :request do
 
     context "when a project is updated adding its owner" do
       it "adds the user as the project owner and returns the project" do
-        #byebug
         expect(json['id']).to eq(projectWithNoOwner.id)
         responseOwner = json['owner']
         expect(responseOwner['id']).to eq (owner.id)

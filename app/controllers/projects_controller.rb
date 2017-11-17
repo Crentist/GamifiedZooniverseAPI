@@ -21,7 +21,6 @@ class ProjectsController < ApplicationController
 
   def update
     @project.update(project_params)
-    #head :no_content
     json_response(@project, :accepted)
   end
 
@@ -33,7 +32,6 @@ class ProjectsController < ApplicationController
   private
 
   def project_params
-    # whitelist params
     params.permit(:name, :user_id)
   end
 

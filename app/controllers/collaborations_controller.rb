@@ -1,40 +1,37 @@
 class CollaborationsController < ApplicationController
   before_action :set_collaboration, only: [:show, :update, :destroy]
 
-  # GET /todos/:todo_id/items
   def index
     @collaborations = Collaboration.all
     json_response(@collaborations)
   end
 
-  # GET /todos/:todo_id/items/:id
   def show
     byebug
     json_response(@collaboration)
   end
 
-  # POST /todos/:todo_id/items
   def create
     @collaboration = Collaboration.create!(collaboration_params)
+    @collaboration.points = 0
+    @collaboration.save!
     json_response(@collaboration, :created)
   end
 
-  # PUT /todos/:todo_id/items/:id
   def update
     @collaboration.update(item_params)
     head :no_content
   end
 
-  # DELETE /todos/:todo_id/items/:id
   def destroy
     @collaboration.destroy
     head :no_content
   end
 
   def increment
-    #byebug
-    @collaboration = Collaboration.find(params[:collaboration_id]) || Collaboration.create!(collaboration_params)
-    @collaboration.points += update_points_params[:value].to_i
+    tasksValues = { "simpleQuestion" => 5, "drawing" => 10 } #Esto a un archivo de config
+    @collaboration = Collaboration.find(params[:collaboration_id])
+    params[:tasks].each { |tarea| @collaboration.points += tasksValues[tarea]}
     @collaboration.save!
     json_response(@collaboration, :accepted)
   end
@@ -42,12 +39,9 @@ class CollaborationsController < ApplicationController
   private
 
   def collaboration_params
-    params.permit(:project_id, :user_id, :points)
+    params.permit(:project_id, :user_id)
   end
 
-  def update_points_params
-    params.permit(:value)
-  end
 
   def set_collaboration
     @collaboration = Collaboration.find(params[:collaboration_id])
