@@ -6,6 +6,7 @@ FactoryGirl.define do
     image { Faker::Internet.url }
     description { Faker::Lorem.word }
     criteria { Faker::Lorem.word }
+    user
 
     factory :generic_badge_granted do
       transient do

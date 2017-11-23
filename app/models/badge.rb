@@ -1,5 +1,5 @@
 class Badge < ApplicationRecord
-  has_and_belongs_to_many :users#, through: :collaborations
+  has_and_belongs_to_many :users, optional: true#, through: :collaborations
 
   validates :name, presence: { message: "Badge name can't be blank"}
   validates :description, presence: { message: "Badge description can't be blank"}

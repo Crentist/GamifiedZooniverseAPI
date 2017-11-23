@@ -7,6 +7,9 @@ class UsersController < ApplicationController
   end
 
   def create
+    #find_or_create_by!!!
+    #@user = User.find_or_create_by!(zooniverseHandle: (params[:zooniverseHandle]))
+
     if ((@user = User.find_by(zooniverseHandle: (params[:zooniverseHandle]))))
       json_response(@user, :ok)
     else

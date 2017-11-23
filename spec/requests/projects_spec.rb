@@ -9,8 +9,9 @@ RSpec.describe 'Project', type: :request do
   let(:collaborator_id) {collaborator.id}
   let(:collaboration) { FactoryGirl.create(:collaboration, points: 0)}
   let(:collaboration_id) {collaboration.id}
-  let(:collaboration_with_points) { FactoryGirl.create(:collaboration, points: 10, user: collaborator, project: project)}
+  let(:collaboration_with_points) { FactoryGirl.create(:collaboration, points: 10, classification_count: 99, user: collaborator, project: project)}
   let(:collaboration_with_points_id) {collaboration_with_points.id}
+  let(:generic_badge) {FactoryGirl.create(:badge, name: "100 clasificaciones", description: "Alcanzaste las 100 clasificaciones!", criteria: JSON.generate({"classification_count"=>100}))}
 
 
   describe 'GET /projects/:id' do
@@ -146,6 +147,18 @@ RSpec.describe 'Project', type: :request do
         expect(response).to have_http_status(202)
       end
     end
+
+    context "when meeting a badge criteria for 100 classifications" do
+      it "issues the appropriate badge (100 overall classifications)" do
+        updated_collaborator = User.find(collaborator_id)
+        expect(updated_collaborator.badges.size).to eq(1)
+        expect(updated_collaborator.has_badge(generic_badge.id)).to be true
+      end
+    end
+
+    #Y posiblemente también hacer un request de usuario para que me devuelva la badge. Pero acá no iría
+
+    #Y también para una badge específica al proyecto
 
   end
 

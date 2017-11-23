@@ -5,6 +5,7 @@ FactoryGirl.define do
     #zooniverseHandle { Faker::Lorem.word }
     sequence(:zooniverseHandle, 'a') { |n| "Gemini" + n }
     #badges
+    #project_badges
 
 
     factory :user_with_5_collaborations do
@@ -23,7 +24,7 @@ FactoryGirl.define do
       end
 
       after(:create) do |user,evaluator|
-        create_list(:project, evaluator.projects_count, user:user)
+        create_list(:project, evaluator.projects_count, user: user)
       end
     end
   end
