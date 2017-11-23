@@ -113,7 +113,7 @@ RSpec.describe 'User', type: :request do
     context "when a user collaborates in a project" do
       it "returns the appropriate collaboration" do
         expect(json).not_to be_empty
-        byebug
+        #byebug
       end
     end
   end

@@ -32,7 +32,7 @@ class UsersController < ApplicationController
   def projectCollaboration
     @user = User.find(params[:user_id])
     collaboration = @user.collaborations.find_by(project_id: params[:project_id])
-    byebug
+    #byebug
     json_response(collaboration, :ok)
   end
 

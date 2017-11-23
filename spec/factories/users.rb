@@ -4,6 +4,7 @@ FactoryGirl.define do
   factory :user, aliases: [:collaborator, :owner] do
     #zooniverseHandle { Faker::Lorem.word }
     sequence(:zooniverseHandle, 'a') { |n| "Gemini" + n }
+    #badges
 
 
     factory :user_with_5_collaborations do

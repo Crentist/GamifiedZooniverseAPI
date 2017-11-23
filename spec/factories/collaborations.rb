@@ -6,5 +6,6 @@ FactoryGirl.define do
     classification_count { Faker::Number.number(3) }
     user
     project
+    project_badges
   end
 end

@@ -1,8 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe 'Badge', type: :request do
-  let(:badge) { FactoryGirl.create :badge, name: 'Primer colaboración', description: 'Lograste tu primer colaboración en el proyecto'}
-  let(:project_badge_granted) { FactoryGirl.create :project_badge_granted, name: 'Primer colaboración', description: 'Lograste tu primer colaboración en el proyecto'}
+  let(:badge) { FactoryGirl.create :badge, name: 'Primer proyecto', description: 'Lograste tu primer colaboración en tu primer proyecto!'}
+  let(:generic_badge_granted) { FactoryGirl.create :generic_badge_granted, name: 'Primer proyecto', description: 'Lograste tu primer colaboración en tu primer proyecto!'}
 
   describe 'GET /badges/:id' do
 
@@ -11,20 +11,21 @@ RSpec.describe 'Badge', type: :request do
       it 'returns the badge' do
         expect(json).not_to be_empty
         expect(json['id']).to eq(badge.id)
-        expect(json['name']).to eq('Primer colaboración')
-        expect(json['description']).to eq('Lograste tu primer colaboración en el proyecto')
-        expect(json['collaborators'].size).to eq(0)
+        expect(json['name']).to eq('Primer proyecto')
+        expect(json['description']).to eq('Lograste tu primer colaboración en tu primer proyecto!')
+        expect(json['users'].size).to eq(0)
       end
     end
 
-    context 'when the badge exists and has been granted three times in a project' do
-      before { get "/badges/#{project_badge_granted.id}/project/#{project.id}" }
+    context 'when the badge exists and has been granted three times' do
+      before { get "/badges/#{generic_badge_granted.id}" }
       it 'returns the badge' do
         expect(json).not_to be_empty
-        expect(json['id']).to eq(project_badge_granted.id)
-        expect(json['name']).to eq('Primer colaboración')
-        expect(json['description']).to eq('Lograste tu primer colaboración en el proyecto')
-        expect(json['collaborators'].size).to eq(3)
+        byebug
+        expect(json['id']).to eq(generic_badge_granted.id)
+        expect(json['name']).to eq('Primer proyecto')
+        expect(json['description']).to eq('Lograste tu primer colaboración en tu primer proyecto!')
+        expect(json['users'].size).to eq(3)
       end
     end
   end

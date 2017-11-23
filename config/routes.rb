@@ -8,6 +8,8 @@ Rails.application.routes.draw do
     resources :collaborations
   end
 
+  resources :badges
+
   post "/projects/:project_id/collaborations/:collaboration_id/increment", to: 'collaborations#increment'
   get "/users/:user_id/collaboration/:project_id", to: 'users#projectCollaboration'
   #post "/projects/:project_id/owner", to: 'projects#owner'
