@@ -21,7 +21,6 @@ RSpec.describe 'Badge', type: :request do
       before { get "/badges/#{generic_badge_granted.id}" }
       it 'returns the badge' do
         expect(json).not_to be_empty
-        byebug
         expect(json['id']).to eq(generic_badge_granted.id)
         expect(json['name']).to eq('Primer proyecto')
         expect(json['description']).to eq('Lograste tu primer colaboración en tu primer proyecto!')

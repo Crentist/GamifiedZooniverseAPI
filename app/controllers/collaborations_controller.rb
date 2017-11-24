@@ -12,9 +12,9 @@ class CollaborationsController < ApplicationController
   end
 
   def create
-    @collaboration = Collaboration.create!(collaboration_params)
-    @collaboration.points = 0
-    @collaboration.save!
+    @collaboration = Collaboration.create!(collaboration_params) do
+      |c| c.points = 0
+    end
     json_response(@collaboration, :created)
   end
 
@@ -29,10 +29,8 @@ class CollaborationsController < ApplicationController
   end
 
   def increment
-    tasksValues = { "simpleQuestion" => 5, "drawing" => 10 } #Esto a un archivo de config
     @collaboration = Collaboration.find(params[:collaboration_id])
-    params[:tasks].each { |tarea| @collaboration.points += tasksValues[tarea]}
-    @collaboration.save!
+    @collaboration.increment(params[:tasks])
     json_response(@collaboration, :accepted)
   end
 

@@ -11,7 +11,7 @@ RSpec.describe 'Project', type: :request do
   let(:collaboration_id) {collaboration.id}
   let(:collaboration_with_points) { FactoryGirl.create(:collaboration, points: 10, classification_count: 99, user: collaborator, project: project)}
   let(:collaboration_with_points_id) {collaboration_with_points.id}
-  let(:generic_badge) {FactoryGirl.create(:badge, name: "100 clasificaciones", description: "Alcanzaste las 100 clasificaciones!", criteria: JSON.generate({"classification_count"=>100}))}
+  let!(:generic_badge) {FactoryGirl.create(:badge, name: "100 clasificaciones", description: "Alcanzaste las 100 clasificaciones!", criteria: JSON.generate({"classification_count"=>100}))}
 
 
   describe 'GET /projects/:id' do
