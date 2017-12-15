@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171123161708) do
+ActiveRecord::Schema.define(version: 20171215165120) do
 
   create_table "badges", force: :cascade do |t|
     t.string "name"
@@ -33,8 +33,17 @@ ActiveRecord::Schema.define(version: 20171123161708) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer "classification_count"
+    t.string "appId"
     t.index ["project_id"], name: "index_collaborations_on_project_id"
     t.index ["user_id"], name: "index_collaborations_on_user_id"
+  end
+
+  create_table "milestones", force: :cascade do |t|
+    t.string "subject"
+    t.integer "value"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "description"
   end
 
   create_table "projects", force: :cascade do |t|
@@ -46,8 +55,13 @@ ActiveRecord::Schema.define(version: 20171123161708) do
     t.index ["user_id"], name: "index_projects_on_user_id"
   end
 
+  create_table "tasks", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "users", force: :cascade do |t|
-    t.string "zooniverseHandle"
+    t.string "handle"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
