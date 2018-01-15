@@ -69,10 +69,10 @@ RSpec.describe 'User', type: :request do
   describe 'POST /users' do
 
     context 'when the request is valid' do
-      before { post "/users", params: {zooniverseHandle: 'jondoe22'}}
+      before { post "/users", params: {handle: 'jondoe22'}}
 
       it 'creates a user' do
-        expect(json['zooniverseHandle']).to eq('jondoe22')
+        expect(json['handle']).to eq('jondoe22')
       end
 
       it 'returns status code 201 (created)' do
@@ -81,13 +81,13 @@ RSpec.describe 'User', type: :request do
     end
 
     context 'when the user already exists' do
-      let!(:existingUser) { FactoryGirl.create(:user, zooniverseHandle: 'jondoe33') }
-      before { post "/users", params: {zooniverseHandle: 'jondoe33'}}
+      let!(:existingUser) { FactoryGirl.create(:user, handle: 'jondoe33') }
+      before { post "/users", params: {handle: 'jondoe33'}}
 
       it "returns the existing user" do
         expect(json).not_to be_empty
         expect(json['id']).not_to be_nil
-        expect(json['zooniverseHandle']).not_to be_nil
+        expect(json['handle']).not_to be_nil
       end
 
     end
@@ -100,7 +100,7 @@ RSpec.describe 'User', type: :request do
       end
 
       it 'returns a validation failure message' do
-        expect(json['message']).to match(/zooniverseHandle can't be blank/)
+        expect(json['message']).to match(/handle can't be blank/)
       end
     end
 

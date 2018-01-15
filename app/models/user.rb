@@ -1,4 +1,8 @@
 class User < ApplicationRecord
+  # Include default devise modules. Others available are:
+  # :confirmable, :lockable, :timeoutable and :omniauthable
+  devise :database_authenticatable, :registerable,
+         :recoverable, :rememberable, :trackable, :validatable
   has_many :collaborations
   has_many :projects, through: :collaborations
   has_many :owned_projects, :class_name => 'Project'
@@ -6,7 +10,7 @@ class User < ApplicationRecord
   has_many :project_badges, through: :project
 
 
-  validates :zooniverseHandle, presence: { message: "zooniverseHandle can't be blank" }, uniqueness: { message: "zooniverseHandle must be unique"}
+  validates :handle, presence: {message: "handle can't be blank" }, uniqueness: {message: "handle must be unique"}
 
   def classification_count
     #global amount of classifications. Generic, non-project badge

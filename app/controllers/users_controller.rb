@@ -8,9 +8,9 @@ class UsersController < ApplicationController
 
   def create
     #find_or_create_by!!!
-    #@user = User.find_or_create_by!(zooniverseHandle: (params[:zooniverseHandle]))
+    #@user = User.find_or_create_by!(handle: (params[:handle]))
 
-    if ((@user = User.find_by(zooniverseHandle: (params[:zooniverseHandle]))))
+    if ((@user = User.find_by(handle: (params[:handle]))))
       json_response(@user, :ok)
     else
       @user = User.create!(user_params)
@@ -43,7 +43,7 @@ class UsersController < ApplicationController
 
   def user_params
     # whitelist params
-    params.permit(:zooniverseHandle)
+    params.permit(:handle)
   end
 
   def set_user
