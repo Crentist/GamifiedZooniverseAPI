@@ -9,7 +9,6 @@ class UsersController < ApplicationController
   def create
     #find_or_create_by!!!
     #@user = User.find_or_create_by!(handle: (params[:handle]))
-
     if ((@user = User.find_by(handle: (params[:handle]))))
       json_response(@user, :ok)
     else

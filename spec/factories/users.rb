@@ -4,6 +4,8 @@ FactoryGirl.define do
   factory :user, aliases: [:collaborator, :owner] do
     #handle { Faker::Lorem.word }
     sequence(:handle, 'a') { |n| "Gemini" + n }
+    email { Faker::Internet.unique.email}
+    password "password"
     #badges
     #project_badges
 

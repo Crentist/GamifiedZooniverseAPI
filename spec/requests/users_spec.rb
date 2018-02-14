@@ -69,9 +69,11 @@ RSpec.describe 'User', type: :request do
   describe 'POST /users' do
 
     context 'when the request is valid' do
-      before { post "/users", params: {handle: 'jondoe22'}}
+      #byebug
+      before { post "/users", params: {user: {handle: 'jondoe22', email: 'email@example.org', password: "somepass"}}}
 
       it 'creates a user' do
+        #byebug
         expect(json['handle']).to eq('jondoe22')
       end
 
@@ -80,27 +82,16 @@ RSpec.describe 'User', type: :request do
       end
     end
 
-    context 'when the user already exists' do
-      let!(:existingUser) { FactoryGirl.create(:user, handle: 'jondoe33') }
-      before { post "/users", params: {handle: 'jondoe33'}}
-
-      it "returns the existing user" do
-        expect(json).not_to be_empty
-        expect(json['id']).not_to be_nil
-        expect(json['handle']).not_to be_nil
-      end
-
-    end
-
     context 'when the request is invalid' do
       before { post '/users', params: { points: 50 } }
 
       it 'returns status code 422' do
+        byebug
         expect(response).to have_http_status(422)
       end
 
       it 'returns a validation failure message' do
-        expect(json['message']).to match(/handle can't be blank/)
+        expect(json).to match(/handle can't be blank/)
       end
     end
 
