@@ -7,10 +7,7 @@ class UsersController < ApplicationController
   end
 
   def create
-    #find_or_create_by!!!
-    #@user = User.find_or_create_by!(zooniverseHandle: (params[:zooniverseHandle]))
-
-    if ((@user = User.find_by(zooniverseHandle: (params[:zooniverseHandle]))))
+    if ((@user = User.find_by(handle: (params[:handle]))))
       json_response(@user, :ok)
     else
       @user = User.create!(user_params)
@@ -35,19 +32,16 @@ class UsersController < ApplicationController
   def projectCollaboration
     @user = User.find(params[:user_id])
     collaboration = @user.collaborations.find_by(project_id: params[:project_id])
-    #byebug
     json_response(collaboration, :ok)
   end
 
   private
 
   def user_params
-    # whitelist params
-    params.permit(:zooniverseHandle)
+    params.permit(:handle, :password, :password_confirmation)
   end
 
   def set_user
-    #byebug
     @user = User.find(params[:id])
   end
 end

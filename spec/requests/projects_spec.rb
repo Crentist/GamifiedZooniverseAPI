@@ -2,10 +2,10 @@ require 'rails_helper'
 
 RSpec.describe 'Project', type: :request do
 
-  let(:owner) { FactoryGirl.create :owner, zooniverseHandle: 'Administratorrr'}
+  let(:owner) { FactoryGirl.create :owner, handle: 'Administratorrr'}
   let!(:project) { FactoryGirl.create :project_with_15_collaborations, name: 'Recorriendo La Plata', owner: owner}
   let(:project_id) {project.id}
-  let(:collaborator) { FactoryGirl.create :collaborator, zooniverseHandle: 'Teste Ador'}
+  let(:collaborator) { FactoryGirl.create :collaborator, handle: 'Teste Ador'}
   let(:collaborator_id) {collaborator.id}
   let(:collaboration) { FactoryGirl.create(:collaboration, points: 0)}
   let(:collaboration_id) {collaboration.id}
@@ -26,18 +26,18 @@ RSpec.describe 'Project', type: :request do
         expect(collaborators.size).to eq(15)
       end
 
-      it 'collaborators should have id, zooniverseHandle and points' do
+      it 'collaborators should have id, handle and points' do
         collaborators = json['collaborators']
         firstCollaborator = collaborators.first
         expect(firstCollaborator['id']).not_to be_nil
-        expect(firstCollaborator['zooniverseHandle']).not_to be_nil
+        expect(firstCollaborator['handle']).not_to be_nil
         expect(firstCollaborator['points']).not_to be_nil
       end
 
       it 'returns its owner along with its data' do
         responseOwner = json['owner']
         expect(responseOwner['id']).to eq (owner.id)
-        expect(responseOwner['zooniverseHandle']).to eq("Administratorrr")
+        expect(responseOwner['handle']).to eq("Administratorrr")
       end
 
       it 'returns status code 200 (ok)' do
@@ -171,7 +171,7 @@ RSpec.describe 'Project', type: :request do
         expect(json['id']).to eq(projectWithNoOwner.id)
         responseOwner = json['owner']
         expect(responseOwner['id']).to eq (owner.id)
-        expect(responseOwner['zooniverseHandle']).to eq("Administratorrr")
+        expect(responseOwner['handle']).to eq("Administratorrr")
       end
 
       it "the model actually reflects the change" do

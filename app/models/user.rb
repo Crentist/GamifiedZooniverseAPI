@@ -6,7 +6,8 @@ class User < ApplicationRecord
   has_many :project_badges, through: :project
 
 
-  validates :zooniverseHandle, presence: { message: "zooniverseHandle can't be blank" }, uniqueness: { message: "zooniverseHandle must be unique"}
+  validates :handle, presence: { message: "handle can't be blank" }, uniqueness: { message: "handle must be unique"}
+  validates :password, presenc: { message: "password can't be blank"}
 
   def classification_count
     #global amount of classifications. Generic, non-project badge
