@@ -45,7 +45,6 @@ RSpec.describe 'User', type: :request do
       before { get "/users/#{user_with_2_owned_projects.id}"}
 
       it "returns the user and his owned project/s" do
-        #byebug
         expect(json['id']).to eq(user_with_2_owned_projects.id)
         expect(json['owned_projects'].size).to eq(2)
         expect(json['owned_projects'].first['name']).not_to be_nil
@@ -66,32 +65,42 @@ RSpec.describe 'User', type: :request do
     end
   end
 
-  describe 'POST /users' do
+  describe 'register a user at POST /register' do
 
     context 'when the request is valid' do
-      #byebug
-      before { post "/users", params: {user: {handle: 'jondoe22', email: 'email@example.org', password: "somepass"}}}
+      before { 
+        post "/register",
+        params: {
+          user: {
+            handle: 'jondoe22',
+            email: 'email@example.org',
+            password: "somepass"
+          }
+        },
+        as: :json
+      }
 
       it 'creates a user' do
-        #byebug
-        expect(json['handle']).to eq('jondoe22')
+        expect(json['user']['handle']).to eq('jondoe22')
+        expect(json['user']['token']).not_to be_nil
       end
 
-      it 'returns status code 201 (created)' do
-        expect(response).to have_http_status(201)
+      it 'returns status code 200 (ok)' do
+        expect(response).to have_http_status(200)
       end
     end
 
     context 'when the request is invalid' do
-      before { post '/users', params: { points: 50 } }
+      before { post '/register', params: { points: 50 }, as: :json }
 
       it 'returns status code 422' do
-        byebug
         expect(response).to have_http_status(422)
       end
 
       it 'returns a validation failure message' do
-        expect(json).to match(/handle can't be blank/)
+        expect(json["errors"]["handle"].first).to match(/handle can't be blank/)
+        expect(json["errors"]["email"].first).to match(/can't be blank/)
+        expect(json["errors"]["password"].first).to match(/can't be blank/)
       end
     end
 
@@ -99,13 +108,95 @@ RSpec.describe 'User', type: :request do
 
   describe 'GET /users/:user_id/collaboration/:collaboration_id/collaboration' do
     let!(:project_id) {user_with_collaborations.collaborations.first.project.id}
+    let!(:collaboration_id) {user_with_collaborations.collaborations.first.id}
     before { get "/users/#{user_with_collaborations_id}/collaboration/#{project_id}" }
 
     context "when a user collaborates in a project" do
       it "returns the appropriate collaboration" do
         expect(json).not_to be_empty
-        #byebug
+        expect(json["id"]).to eq(collaboration_id)
       end
     end
+  end
+
+  describe 'link the user to a new site username' do
+
+    context 'user exists and username hasnt been added for that site and params are valid' do
+      before {
+        post "/users/#{user_id}/siteUsername",
+        params: {
+          site: "zooniverse.org",
+          username: "lukewarm"
+        }
+      }
+
+      it 'adds the username and returns the users usernames sites' do
+        # {
+        #   "sites_usernames": {
+        #     "zooniverse.org": [
+        #       "lukewarm"
+        #     ]
+        #   }
+        # }
+
+        expect(json).not_to be_empty
+        expect(json['sites_usernames']).not_to be_nil
+        expect(json['sites_usernames']['zooniverse.org']).to include("lukewarm")
+      end
+
+      it 'returns status code 201' do
+        expect(response).to have_http_status(201)
+      end
+    end
+
+    context 'another username is added for the same site' do
+      let!(:user_with_sites_usernames) {FactoryGirl.create(:user, sitesUsernames: {'zooniverse.org' => ['lukewarm']}.to_s)}
+
+      before {
+        post "/users/#{user_with_sites_usernames.id}/siteUsername",
+        params: {
+          site: "zooniverse.org",
+          username: "marineer"
+        }
+      }   
+
+      it 'adds the username and returns the users usernames sites' do
+        expect(json).not_to be_empty
+        expect(json['sites_usernames']).not_to be_nil
+        expect(json['sites_usernames']['zooniverse.org']).to include("lukewarm")
+        expect(json['sites_usernames']['zooniverse.org']).to include("marineer")
+
+      end
+
+      it 'returns status code 201' do
+        expect(response).to have_http_status(201)
+      end
+
+    end
+
+    context 'another username is added for a different site' do
+      let!(:user_with_sites_usernames) {FactoryGirl.create(:user, sitesUsernames: {'universe.org' => ['lukewarm']}.to_s)}
+
+      before {
+        post "/users/#{user_with_sites_usernames.id}/siteUsername",
+        params: {
+          site: "zooniverse.org",
+          username: "marineer"
+        }
+      }   
+
+      it 'adds the username and returns the users usernames sites' do
+        expect(json).not_to be_empty
+        expect(json['sites_usernames']).not_to be_nil
+        expect(json['sites_usernames']['universe.org']).to include("lukewarm")
+        expect(json['sites_usernames']['zooniverse.org']).to include("marineer")
+
+      end
+
+      it 'returns status code 201' do
+        expect(response).to have_http_status(201)
+      end
+
+    end    
   end
 end

@@ -84,6 +84,7 @@ RSpec.configure do |config|
 
   config.include RequestSpecHelper, type: :request
 
+  config.include Devise::Test::IntegrationHelpers, type: :request
   #config.include RequestSpecHelper, type: :controller
 
   #config.infer_spec_type_from_file_location!

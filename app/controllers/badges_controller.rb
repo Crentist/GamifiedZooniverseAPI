@@ -1,6 +1,8 @@
 class BadgesController < ApplicationController
   before_action :set_badge, only: [:show, :update, :destroy]
 
+  skip_before_action :authenticate_user #scope: :user ???
+
   # GET /badges
   def index
     @badges = Badge.all

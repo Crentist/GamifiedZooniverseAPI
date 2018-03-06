@@ -1,6 +1,8 @@
 class ProjectsController < ApplicationController
   before_action :set_project, only: [:show, :update, :destroy]
 
+  skip_before_action :authenticate_user
+
   def index
     @projects = Project.all
     json_response(@projects)

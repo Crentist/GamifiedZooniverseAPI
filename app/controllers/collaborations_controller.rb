@@ -1,13 +1,14 @@
 class CollaborationsController < ApplicationController
   before_action :set_collaboration, only: [:show, :update, :destroy]
 
+  skip_before_action :authenticate_user #scope: :user ???
+
   def index
     @collaborations = Collaboration.all
     json_response(@collaborations)
   end
 
   def show
-    byebug
     json_response(@collaboration)
   end
 

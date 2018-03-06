@@ -2,6 +2,11 @@
 
 class Users::RegistrationsController < Devise::RegistrationsController
   before_action :configure_sign_up_params, only: [:create]
+
+  skip_before_action :authenticate_user, only: [:create]
+
+  respond_to :json
+
   # before_action :configure_account_update_params, only: [:update]
 
   # GET /resource/sign_up
@@ -10,23 +15,6 @@ class Users::RegistrationsController < Devise::RegistrationsController
   # end
 
   # POST /resource
-  def create
-
-    #resource = build_resource(devise_parameter_sanitizer.sanitize(:sign_up)
-    #resource.save
-    build_resource(sign_up_params)
-    resource_saved = resource.save
-    #yield resource if block_given?
-    #status, content = registrations_response(resource_saved)
-    #clean_up_passwords resource
-    #render status: status, json_api: content
-    #byebug
-    if resource_saved
-      json_response(resource, :created)
-    else
-      json_response(resource, :unprocessable_entity)
-    end
-  end
 
   # GET /resource/edit
   # def edit
@@ -55,19 +43,9 @@ class Users::RegistrationsController < Devise::RegistrationsController
   # protected
   private
 
-  def user_params
-    # whitelist params
-    params.require(:user).permit(:handle)
-  end
-
-  #def set_user
-    #byebug
-  #  @user = User.find(params[:id])
-  #end
   # If you have extra params to permit, append them to the sanitizer.
   def configure_sign_up_params
-    #byebug
-    devise_parameter_sanitizer.permit(:sign_up, keys: [:handle])
+    devise_parameter_sanitizer.permit(:sign_up, keys: [:handle, :email])
   end
 
   # If you have extra params to permit, append them to the sanitizer.
