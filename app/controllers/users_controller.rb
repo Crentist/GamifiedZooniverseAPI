@@ -30,25 +30,24 @@ class UsersController < ApplicationController
     head :no_content
   end
 
-  def projectCollaboration
+  def project_collaboration
     collaboration = @user.collaborations.find_by(project_id: params[:project_id])
     json_response(collaboration, :ok)
   end
 
   # GET
-  def sitesUsername
+  def sites_usernames
     user = User.find(params[:user_id])
-    sitesUsernames = @user.sitesUsernames
-
+    json_response({sites_usernames: @user.get_sites_usernames}, :ok)
   end
 
   # POST
-  def siteUsername
+  def site_username
     if params["site"] && params["username"]
       if @user.add_site_username(params["site"], params["username"])
         json_response({sites_usernames: @user.get_sites_usernames}, :created)
       else
-        json_response(cannot_add_error, :ok)
+        json_response(cannot_add_error, :unprocessable_entity)
       end
     else
       json_response(no_params_error, :unprocessable_entity)
@@ -77,7 +76,7 @@ class UsersController < ApplicationController
 
   def cannot_add_error
     {
-      error: "No se pudo agregar el username al sitio"
+      error: "El username ya existe para el sitio indicado"
     }
   end
 end

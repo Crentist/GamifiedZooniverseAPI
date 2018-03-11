@@ -1,4 +1,8 @@
+require "application_responder"
+
 class ApplicationController < ActionController::API
+  self.responder = ApplicationResponder
+
   include Response
   include ExceptionHandler
   include ActionController::HttpAuthentication::Token::ControllerMethods

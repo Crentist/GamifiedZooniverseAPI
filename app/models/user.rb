@@ -40,6 +40,7 @@ class User < ApplicationRecord
 
     sitesUsernamesHash = get_sites_usernames
     if sitesUsernamesHash.has_key?(site)
+      return false if sitesUsernamesHash[site].include?(username)
       sitesUsernamesHash[site].concat([username])
     else
       sitesUsernamesHash.merge!(siteUsernameHash)

@@ -123,7 +123,7 @@ RSpec.describe 'User', type: :request do
 
     context 'user exists and username hasnt been added for that site and params are valid' do
       before {
-        post "/users/#{user_id}/siteUsername",
+        post "/users/#{user_id}/site_username",
         params: {
           site: "zooniverse.org",
           username: "lukewarm"
@@ -149,11 +149,19 @@ RSpec.describe 'User', type: :request do
       end
     end
 
-    context 'another username is added for the same site' do
-      let!(:user_with_sites_usernames) {FactoryGirl.create(:user, sitesUsernames: {'zooniverse.org' => ['lukewarm']}.to_s)}
+    context 'another username is added for an existing site' do
+      let!(:user_with_sites_usernames) do 
+        FactoryGirl.create(
+          :user,
+          sitesUsernames: 
+          {
+            'zooniverse.org' => ['lukewarm']
+          }.to_s
+        )
+      end
 
       before {
-        post "/users/#{user_with_sites_usernames.id}/siteUsername",
+        post "/users/#{user_with_sites_usernames.id}/site_username",
         params: {
           site: "zooniverse.org",
           username: "marineer"
@@ -174,11 +182,49 @@ RSpec.describe 'User', type: :request do
 
     end
 
-    context 'another username is added for a different site' do
-      let!(:user_with_sites_usernames) {FactoryGirl.create(:user, sitesUsernames: {'universe.org' => ['lukewarm']}.to_s)}
+    context 'an existing username for a site is added' do
+      let!(:user_with_sites_usernames) do 
+        FactoryGirl.create(
+          :user,
+          sitesUsernames: 
+          {
+            'universe.org' => ['lukewarm']
+          }.to_s
+        )
+      end
 
       before {
-        post "/users/#{user_with_sites_usernames.id}/siteUsername",
+        post "/users/#{user_with_sites_usernames.id}/site_username",
+        params: {
+          site: "universe.org",
+          username: "lukewarm"
+        }
+      }   
+
+      it 'returns an error message' do
+        expect(json).not_to be_empty
+        expect(json['error']).to eq('El username ya existe para el sitio indicado')
+      end
+
+      it 'returns status code 422 (unprocessable entity)' do
+        expect(response).to have_http_status(422)
+      end 
+
+    end    
+
+    context 'another username is added for a different site' do
+      let!(:user_with_sites_usernames) do 
+        FactoryGirl.create(
+          :user,
+          sitesUsernames: 
+          {
+            'universe.org' => ['lukewarm']
+          }.to_s
+        )
+      end
+
+      before {
+        post "/users/#{user_with_sites_usernames.id}/site_username",
         params: {
           site: "zooniverse.org",
           username: "marineer"
@@ -197,6 +243,63 @@ RSpec.describe 'User', type: :request do
         expect(response).to have_http_status(201)
       end
 
-    end    
+    end  
+
+    context 'a param is missing' do
+      let!(:user_with_sites_usernames) do 
+        FactoryGirl.create(
+          :user,
+          sitesUsernames: 
+          {
+            'universe.org' => ['lukewarm']
+          }.to_s
+        )
+      end
+
+      before {
+        post "/users/#{user_with_sites_usernames.id}/site_username",
+        params: {
+          username: "marineer"
+        }
+      }   
+
+      it 'returns an error message' do
+        expect(json).not_to be_empty
+        expect(json['error']).to eq('Nombre de sitio o username no presentes')
+      end
+
+      it 'returns status code 422 (unprocessable entity)' do
+        expect(response).to have_http_status(422)
+      end  
+      
+    end
+
+    context 'get the users sites usernames' do
+      let!(:user_with_sites_usernames) do 
+        FactoryGirl.create(
+          :user,
+          sitesUsernames: 
+          {
+            'universe.org' => ['lukewarm'],
+            'zooniverse.org' => ['marineer']
+          }.to_s
+        )
+      end
+
+      before {
+        get "/users/#{user_with_sites_usernames.id}/sites_usernames"
+      }   
+
+      it 'returns the users usernames sites' do
+        expect(json).not_to be_empty
+        expect(json['sites_usernames']).not_to be_nil
+        expect(json['sites_usernames']['universe.org']).to include("lukewarm")
+        expect(json['sites_usernames']['zooniverse.org']).to include("marineer")
+      end
+
+      it 'returns status code 200' do
+        expect(response).to have_http_status(200)
+      end
+    end
   end
 end
