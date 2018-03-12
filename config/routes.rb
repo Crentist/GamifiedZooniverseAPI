@@ -6,7 +6,6 @@ Rails.application.routes.draw do
 
   devise_scope :user do
     post 'login' => 'users/sessions#create'
-    delete 'logout' => 'users/sessions#destroy'
     post 'register' => 'users/registrations#create'
   end
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html

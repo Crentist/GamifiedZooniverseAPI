@@ -4,9 +4,9 @@ class UsersController < ApplicationController
 
   before_action :set_user_by_user_id,
                 only: [
-                        :projectCollaboration,
-                        :sitesUsernames,
-                        :siteUsername
+                        :project_collaboration,
+                        :sites_usernames,
+                        :site_username
                       ]
 
   skip_before_action :authenticate_user
@@ -37,7 +37,6 @@ class UsersController < ApplicationController
 
   # GET
   def sites_usernames
-    user = User.find(params[:user_id])
     json_response({sites_usernames: @user.get_sites_usernames}, :ok)
   end
 

@@ -30,14 +30,14 @@ class Users::SessionsController < Devise::SessionsController
   end
 
   # DELETE /resource/sign_out
-  def destroy
-    byebug
-    if @current_user
-      @current_user.sign_out
-      render json: {"message": "Cerrada sesión del usuario"},
-             status: :ok
-    end
-  end
+  # def destroy
+  #   byebug
+  #   if @current_user
+  #     @current_user.sign_out
+  #     render json: {"message": "Cerrada sesión del usuario"},
+  #            status: :ok
+  #   end
+  # end
 
   protected
 
