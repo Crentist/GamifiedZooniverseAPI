@@ -53,4 +53,10 @@ class User < ApplicationRecord
     return {} if sitesUsernames.blank?
     JSON.parse(sitesUsernames.gsub("=>",":"))
   end
+
+  def join_project(project)
+    self.projects << project
+    project.add_collaborator(self)
+    self.save!
+  end
 end

@@ -14,4 +14,9 @@ class Project < ApplicationRecord
   def owner=(user)
     self.user = user
   end
+
+  def add_collaborator(collaborator)
+    self.collaborators << collaborator
+    self.save!
+  end
 end

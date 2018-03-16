@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180302205518) do
+ActiveRecord::Schema.define(version: 20180313220039) do
 
   create_table "badges", force: :cascade do |t|
     t.string "name"
@@ -52,6 +52,7 @@ ActiveRecord::Schema.define(version: 20180302205518) do
     t.datetime "updated_at", null: false
     t.integer "user_id"
     t.string "discipline"
+    t.string "site"
     t.index ["user_id"], name: "index_projects_on_user_id"
   end
 

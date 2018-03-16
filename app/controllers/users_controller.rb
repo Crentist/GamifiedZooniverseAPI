@@ -6,7 +6,8 @@ class UsersController < ApplicationController
                 only: [
                         :project_collaboration,
                         :sites_usernames,
-                        :site_username
+                        :site_username,
+                        :join_project
                       ]
 
   skip_before_action :authenticate_user
@@ -51,6 +52,15 @@ class UsersController < ApplicationController
     else
       json_response(no_params_error, :unprocessable_entity)
     end
+  end
+
+  def join_project
+    project = Project.find_or_create_by(name: params[:project]) do |project|
+      project.site = params[:site]
+    end
+    
+    @user.join_project(project)
+    json_response(@user, :created)
   end
 
   private

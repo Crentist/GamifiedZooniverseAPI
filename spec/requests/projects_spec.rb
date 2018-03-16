@@ -4,6 +4,7 @@ RSpec.describe 'Project', type: :request do
 
   let(:owner) { FactoryGirl.create :owner, handle: 'Administratorrr'}
   let!(:project) { FactoryGirl.create :project_with_15_collaborations, name: 'Recorriendo La Plata', owner: owner}
+  let!(:project_2) { FactoryGirl.create :project }
   let(:project_id) {project.id}
   let(:collaborator) { FactoryGirl.create :collaborator, handle: 'Teste Ador'}
   let(:collaborator_id) {collaborator.id}
@@ -53,6 +54,27 @@ RSpec.describe 'Project', type: :request do
       end
     end
 
+  end
+
+  describe 'GET /projects' do
+    context 'there are projects' do
+      before { get "/projects" }
+
+      it 'returns all the projects' do
+        expect(json).not_to be_empty
+        expect(json.size).to eq(2)
+        project1 = json.first
+        project2 = json.second
+        expect(project1['id']).to eq(project.id)
+        expect(project2['id']).to eq(project_2.id)
+        expect(project1['collaborations'].size).to eq(15)
+        expect(project2['collaborations'].size).to eq(0)
+      end
+
+      it 'returns status code 200' do
+        expect(response).to have_http_status(200)
+      end
+    end
   end
 
   describe 'POST /projects' do

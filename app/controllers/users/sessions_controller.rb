@@ -21,9 +21,7 @@ class Users::SessionsController < Devise::SessionsController
       render json:
         {
           errors:
-            {
-              'handle or password' => ['is invalid']
-            }
+            ['Nombre de usuario o contraseña incorrectos']
         },
              status: :unprocessable_entity
     end

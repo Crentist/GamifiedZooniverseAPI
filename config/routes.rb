@@ -23,5 +23,6 @@ Rails.application.routes.draw do
   get "/users/:user_id/collaboration/:project_id", to: 'users#project_collaboration'
   get "/users/:user_id/sites_usernames", to: 'users#sites_usernames'
   post "/users/:user_id/site_username", to: 'users#site_username'
+  post '/users/:user_id/join_project', to: 'users#join_project'
   #post "/projects/:project_id/owner", to: 'projects#owner'
 end
