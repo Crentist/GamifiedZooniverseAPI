@@ -56,7 +56,7 @@ class User < ApplicationRecord
 
   def join_project(project)
     self.projects << project
-    project.add_collaborator(self)
+    # project.add_collaborator(self)
     self.save!
   end
 end
