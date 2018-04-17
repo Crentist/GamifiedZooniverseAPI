@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180313220039) do
+ActiveRecord::Schema.define(version: 20180417212828) do
 
   create_table "badges", force: :cascade do |t|
     t.string "name"
@@ -27,12 +27,12 @@ ActiveRecord::Schema.define(version: 20180313220039) do
   end
 
   create_table "collaborations", force: :cascade do |t|
-    t.integer "points"
+    t.integer "points", default: 0
     t.integer "project_id"
     t.integer "user_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer "classification_count"
+    t.integer "classification_count", default: 0
     t.string "appId"
     t.index ["project_id"], name: "index_collaborations_on_project_id"
     t.index ["user_id"], name: "index_collaborations_on_user_id"

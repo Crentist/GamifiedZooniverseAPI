@@ -17,6 +17,4 @@ class Collaboration < ApplicationRecord
     #ProjectBadgeEngine::checkCriteriaAndIssue(self, self.user)
     self.save!
   end
-
-
 end
