@@ -11,7 +11,7 @@ class Collaboration < ApplicationRecord
   @@tasksValues = { "simpleQuestion" => 5, "drawing" => 10 } # Esto a un archivo de config
 
   def increment(tasks)
-    #byebug
+    self.points ||= 0
     tasks.each { |tarea| self.points += @@tasksValues[tarea]}
     BadgeEngine.checkCriteriaAndIssue(self.user)
     #ProjectBadgeEngine::checkCriteriaAndIssue(self, self.user)
