@@ -12,6 +12,8 @@ class Collaboration < ApplicationRecord
 
   def increment(tasks)
     self.points ||= 0
+    self.classification_count ||= 0
+    self.classification_count += 1
     tasks.each { |tarea| self.points += @@tasksValues[tarea]}
     BadgeEngine.checkCriteriaAndIssue(self.user)
     #ProjectBadgeEngine::checkCriteriaAndIssue(self, self.user)
