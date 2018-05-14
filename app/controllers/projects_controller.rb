@@ -1,5 +1,5 @@
 class ProjectsController < ApplicationController
-  before_action :set_project, only: [:show, :update, :destroy]
+  before_action :set_project, only: [:show, :update, :destroy, :ranking]
 
   skip_before_action :authenticate_user
 
@@ -29,6 +29,10 @@ class ProjectsController < ApplicationController
   def destroy
     @project.destroy
     head :no_content
+  end
+
+  def ranking
+    json_response(@project.scoreboard(user_id: params[:user_id]))
   end
 
   private

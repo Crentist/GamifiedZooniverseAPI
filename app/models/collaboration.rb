@@ -8,7 +8,7 @@ class Collaboration < ApplicationRecord
 
   require 'BadgeEngine'
 
-  @@tasksValues = { "simpleQuestion" => 5, "drawing" => 10 } # Esto a un archivo de config
+  @@tasksValues = { "notSupported" => 0, "simpleQuestion" => 5, "drawing" => 10 } # Esto a un archivo de config
 
   def increment(tasks)
     self.points ||= 0

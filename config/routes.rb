@@ -14,6 +14,9 @@ Rails.application.routes.draw do
   end
 
   resources :projects do
+    member do
+      get 'ranking/:user_id', to: 'projects#ranking'
+    end
     resources :collaborations
   end
 
